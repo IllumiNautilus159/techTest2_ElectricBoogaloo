@@ -7,11 +7,11 @@ generator client {
 }
 
 datasource db {
-    provider = "mysql"
+    provider = "sqlite"
     url      = env("DATABASE_URL")
 
     // If you have enabled foreign key constraints for your database, remove this line.
-    relationMode = "prisma"
+    //relationMode = "prisma"
 }
 
 model Post {
@@ -34,12 +34,12 @@ model Account {
     type              String
     provider          String
     providerAccountId String
-    refresh_token     String? @db.Text
-    access_token      String? @db.Text
+    refresh_token     String? //@db.Text error: Native type Text is not supported for sqlite connector.
+    access_token      String? //@db.Text error: Native type Text is not supported for sqlite connector.
     expires_at        Int?
     token_type        String?
     scope             String?
-    id_token          String? @db.Text
+    id_token          String? //@db.Text error: Native type Text is not supported for sqlite connector.
     session_state     String?
     user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
