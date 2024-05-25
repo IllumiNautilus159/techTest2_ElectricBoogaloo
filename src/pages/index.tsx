@@ -82,7 +82,7 @@ export default function Home() {
 
 
 
-export function CodeGenButton(props){
+export function CodeGenButton(props:{code : string ,update : any }){
   // function that generates a new code then updates the state 
   const update = props.update;
   // the value that is to be displayed
