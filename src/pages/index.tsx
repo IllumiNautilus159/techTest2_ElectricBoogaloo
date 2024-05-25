@@ -1,9 +1,7 @@
-import { getServerSession } from "next-auth";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import { OperatorFunction } from "node_modules/@trpc/server/dist/observable/types";
-import { FunctionComponent, FunctionComponentElement, useContext, useEffect, useState } from "react";
+import {  useState } from "react";
 import { ScratchCode } from "~/types/ScratchCode";
 import { api } from "~/utils/api";
 
@@ -16,16 +14,17 @@ export default function Home() {
   const [allCodes,setAllCodes] = useState<ScratchCode[]>();
 
   //init values
-  let initcodes = api.code.getAllCodes.useQuery();
-  let makeCode = api.code.generateCode.useQuery("500");
+  const initcodes = api.code.getAllCodes.useQuery();
+  const makeCode = api.code.generateCode.useQuery("500");
 
   // refesh state vars (triggers when "Make a code!" clicked)
-  const _newCode = ()=>{
-    makeCode.refetch();
-    initcodes.refetch();
+  const _newCode = async ()=>{
+    await makeCode.refetch();
+    await initcodes.refetch();
     newCode(makeCode.data);
     setAllCodes(initcodes.data);
   }
+
   return (
     <>
       <Head>
@@ -66,13 +65,13 @@ export default function Home() {
             <p className="text-2xl text-white">
               {hello.data ? hello.data.greeting : "Loading tRPC query..."}
             </p>
-            <CodeGenButton code={lastCode?.code} update={_newCode} />
+            <CodeGenButton lastCode={lastCode?.code} callback={_newCode} />
             <AuthShowcase />
           </div>
-          <h3 className="text-white">Here's a list of all the failed attempts haha</h3>
-          {allCodes?.map((code)=>{
-            return <p key={code.id} className="text-white">{code.code}</p>
-          })}
+          <h3 className="text-white">Here\'s a list of all the failed attempts haha</h3>
+          {allCodes?.map((code)=>
+            <p key={code.id} className="text-white">{code.code}</p>
+          )}
         
         </div>
       </main>
@@ -80,13 +79,17 @@ export default function Home() {
   );
 }
 
+// make sure the button's data is hunky-dory
+type ButtonData = {
+  callback:()=>void;
+  lastCode?:string
+}
 
-
-export function CodeGenButton(props:{code? : string ,update : any }){
+export function CodeGenButton(props:ButtonData){
   // function that generates a new code then updates the state 
-  const update = props.update;
+  const update = props.callback;
   // the value that is to be displayed
-  const code = props.code;
+  const code = props.lastCode;
   return <>
           <button className="text-white" onClick={update}>Make A Code!</button>
           <p className="text-white">{code}</p>

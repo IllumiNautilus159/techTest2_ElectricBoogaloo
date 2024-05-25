@@ -1,6 +1,5 @@
 import { z } from "zod";
-import { ScratchCode } from "~/types/ScratchCode";
-import {createTRPCRouter,protectedProcedure,publicProcedure} from "~/server/api/trpc";
+import {createTRPCRouter,publicProcedure} from "~/server/api/trpc";
 
 export const codeRouter = createTRPCRouter({
     getCode:publicProcedure
