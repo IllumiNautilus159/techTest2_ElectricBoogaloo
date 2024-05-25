@@ -12,14 +12,26 @@ export const codeRouter = createTRPCRouter({
             }
         })
     }),
-    // generateCode:publicProcedure
-    //     .input(z.string())
-    //     .mutation(async({ctx,input})=>{
-    //         return ctx.db.code.create({
-    //             data: {
-    //                 value: input,
-    //             },
-    //         });
-    // }),
+    generateCode:publicProcedure
+        .input(z.string().optional())
+        .query(async({ctx,input})=>{
+            return ctx.db.code.create({
+                data: {
+                    value: input ?? "10",
+                    redeemed:false,
+                    redeemedAt:new Date()
+                },
+            });
+    }),
+    first: publicProcedure
+    .query(({ctx})=>{
+        return ctx.db.code.findFirst({
+            where:{
+                id: {
+                    not:undefined
+                }
+            }
+        });
+    })
 
 });

@@ -22,8 +22,7 @@ model Code {
     owner User? @relation(fields: [userId], references: [id])
     redeemed Boolean
     createdAt DateTime @default(now())
-    redeemedAt DateTime
-
+    redeemedAt DateTime?
     @@index([userId])
 }
 

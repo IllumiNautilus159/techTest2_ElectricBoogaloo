@@ -1,10 +1,17 @@
+import { now } from "next-auth/client/_utils";
 import { db } from "~/server/db";
 import {ScratchCode} from "~/types/ScratchCode";
 
 // seed will add one fresh code to the db :)
 
 async function myPreciousSeed() : Promise<ScratchCode | Error>{
-  const code : ScratchCode | null = await db.code.findFirst();
+  const code : ScratchCode | null = await db.code.create({
+    data: {
+      value:"test",
+      redeemed:false,
+      redeemedAt: new Date(now())
+    }
+  });
   if(code){
     return code;
   }else{

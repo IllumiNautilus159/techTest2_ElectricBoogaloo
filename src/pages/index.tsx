@@ -2,14 +2,15 @@ import { getServerSession } from "next-auth";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
+import { useContext, useEffect, useState } from "react";
+import { ScratchCode } from "~/types/ScratchCode";
 import { api } from "~/utils/api";
 
 export default function Home() {
   const hello = api.post.hello.useQuery({ text: "from tRPC" });
-  const ses = useSession();
-  const codeTest = api.code.getCode.useQuery(1);
-  console.log(ses);
-  console.log(codeTest);
+  const session = useSession();
+
+  console.log(session);
   return (
     <>
       <Head>
@@ -46,6 +47,7 @@ export default function Home() {
               </div>
             </Link>
           </div>
+            <CodeGenButton/>
           <div className="flex flex-col items-center gap-2">
             <p className="text-2xl text-white">
               {hello.data ? hello.data.greeting : "Loading tRPC query..."}
@@ -56,6 +58,19 @@ export default function Home() {
       </main>
     </>
   );
+}
+
+
+
+function CodeGenButton(){
+
+  const [lastCode, newCode] = useState();
+ 
+
+  return <>
+          <button onClick={()=>{console.log(lastCode)}}>Make A Code!</button>
+          <p>FUCK</p>
+        </>;
 }
 
 function AuthShowcase() {
