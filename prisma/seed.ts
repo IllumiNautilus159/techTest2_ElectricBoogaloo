@@ -1,5 +1,5 @@
 import { db } from "~/server/db";
-import {ScratchCode} from "../src/types/ScratchCode";
+import {ScratchCode} from "~/types/ScratchCode";
 
 // seed will add one fresh code to the db :)
 
