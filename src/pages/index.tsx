@@ -8,14 +8,23 @@ import { ScratchCode } from "~/types/ScratchCode";
 import { api } from "~/utils/api";
 
 export default function Home() {
-  const hello = api.post.hello.useQuery({ text: "from tRPC" });
-  const session = useSession();
-  const [lastCode, newCode] = useState<ScratchCode|null|undefined>();
-  const allCodes : ScratchCode[] | undefined = api.code.getAllCodes.useQuery().data;
-  const makeCode = api.code.generateCode.useQuery("500");
 
+  const hello = api.post.hello.useQuery({ text: "from tRPC" });
+
+  // define state variables 
+  const [lastCode, newCode] = useState<ScratchCode>();
+  const [allCodes,setAllCodes] = useState<ScratchCode[]>();
+
+  //init values
+  var initcodes = api.code.getAllCodes.useQuery();
+  var makeCode = api.code.generateCode.useQuery("500");
+
+  // refesh state vars (triggers when "Make a code!" clicked)
   const _newCode = ()=>{
-    return newCode(makeCode.data);
+    makeCode.refetch();
+    initcodes.refetch();
+    newCode(makeCode.data);
+    setAllCodes(initcodes.data);
   }
   return (
     <>
@@ -62,7 +71,7 @@ export default function Home() {
           </div>
           <h3 className="text-white">Here's a list of all the failed attempts haha</h3>
           {allCodes?.map((code)=>{
-            return <p className="text-white">{code.code}</p>
+            return <p key={code.id} className="text-white">{code.code}</p>
           })}
         
         </div>
@@ -74,8 +83,9 @@ export default function Home() {
 
 
 export function CodeGenButton(props){
-
+  // function that generates a new code then updates the state 
   const update = props.update;
+  // the value that is to be displayed
   const code = props.code;
   return <>
           <button className="text-white" onClick={update}>Make A Code!</button>
