@@ -16,8 +16,8 @@ export default function Home() {
   const [allCodes,setAllCodes] = useState<ScratchCode[]>();
 
   //init values
-  var initcodes = api.code.getAllCodes.useQuery();
-  var makeCode = api.code.generateCode.useQuery("500");
+  let initcodes = api.code.getAllCodes.useQuery();
+  let makeCode = api.code.generateCode.useQuery("500");
 
   // refesh state vars (triggers when "Make a code!" clicked)
   const _newCode = ()=>{
