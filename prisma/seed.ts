@@ -1,22 +1,18 @@
 import { db } from "~/server/db";
-import { Prisma, PrismaClient } from "@prisma/client";
-type ScratchCode = {
-    value:string,
-    redeemed :boolean 
+import {ScratchCode} from "../src/types/ScratchCode";
+
+// seed will add one fresh code to the db :)
+
+async function myPreciousSeed() : Promise<ScratchCode | Error>{
+  const code : ScratchCode | null = await db.code.findFirst();
+  if(code){
+    return code;
+  }else{
+    return Error("Failed to make code!");
+  }
 }
 
-
-async function myPreciousSeed(){
-
-    const makeCodes : ScratchCode[] = async()=>{
-
-        const code = await db.code.getFirst();
-        return code;
-    }
-
-}
-
-myPreciousSeed()
+export default myPreciousSeed()
   .then(async () => {
     await db.$disconnect()
   })
