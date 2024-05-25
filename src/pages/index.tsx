@@ -2,15 +2,21 @@ import { getServerSession } from "next-auth";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import { useContext, useEffect, useState } from "react";
+import { OperatorFunction } from "node_modules/@trpc/server/dist/observable/types";
+import { FunctionComponent, FunctionComponentElement, useContext, useEffect, useState } from "react";
 import { ScratchCode } from "~/types/ScratchCode";
 import { api } from "~/utils/api";
 
 export default function Home() {
   const hello = api.post.hello.useQuery({ text: "from tRPC" });
   const session = useSession();
+  const [lastCode, newCode] = useState<ScratchCode|null|undefined>();
+  const allCodes : ScratchCode[] | undefined = api.code.getAllCodes.useQuery().data;
+  const makeCode = api.code.generateCode.useQuery("500");
 
-  console.log(session);
+  const _newCode = ()=>{
+    return newCode(makeCode.data);
+  }
   return (
     <>
       <Head>
@@ -47,13 +53,18 @@ export default function Home() {
               </div>
             </Link>
           </div>
-            <CodeGenButton/>
           <div className="flex flex-col items-center gap-2">
             <p className="text-2xl text-white">
               {hello.data ? hello.data.greeting : "Loading tRPC query..."}
             </p>
+            <CodeGenButton key={lastCode} code={lastCode?.code} update={_newCode} />
             <AuthShowcase />
           </div>
+          <h3 className="text-white">Here's a list of all the failed attempts haha</h3>
+          {allCodes?.map((code)=>{
+            return <p className="text-white">{code.code}</p>
+          })}
+        
         </div>
       </main>
     </>
@@ -62,15 +73,15 @@ export default function Home() {
 
 
 
-function CodeGenButton(){
+export function CodeGenButton(props){
 
-  const [lastCode, newCode] = useState();
- 
-
+  const update = props.update;
+  const code = props.code;
   return <>
-          <button onClick={()=>{console.log(lastCode)}}>Make A Code!</button>
-          <p>FUCK</p>
-        </>;
+          <button className="text-white" onClick={update}>Make A Code!</button>
+          <p className="text-white">{code}</p>
+        </>
+
 }
 
 function AuthShowcase() {

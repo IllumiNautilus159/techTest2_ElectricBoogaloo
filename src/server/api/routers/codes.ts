@@ -32,6 +32,16 @@ export const codeRouter = createTRPCRouter({
                 }
             }
         });
+    }),
+    getAllCodes:publicProcedure
+    .query(({ctx})=>{
+        return ctx.db.code.findMany({
+            where:{
+                id:{
+                    not:0
+                }
+            }
+        })
     })
 
 });
