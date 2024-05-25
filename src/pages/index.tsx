@@ -66,7 +66,7 @@ export default function Home() {
             <p className="text-2xl text-white">
               {hello.data ? hello.data.greeting : "Loading tRPC query..."}
             </p>
-            <CodeGenButton key={lastCode} code={lastCode?.code} update={_newCode} />
+            <CodeGenButton code={lastCode?.code} update={_newCode} />
             <AuthShowcase />
           </div>
           <h3 className="text-white">Here's a list of all the failed attempts haha</h3>
@@ -82,7 +82,7 @@ export default function Home() {
 
 
 
-export function CodeGenButton(props:{code : string ,update : any }){
+export function CodeGenButton(props:{code? : string ,update : any }){
   // function that generates a new code then updates the state 
   const update = props.update;
   // the value that is to be displayed
