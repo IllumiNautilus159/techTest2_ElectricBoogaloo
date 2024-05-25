@@ -1,8 +1,8 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import {  useState } from "react";
-import { ScratchCode } from "~/types/ScratchCode";
+import { useState } from "react";
+import type { ScratchCode } from "~/types/ScratchCode";
 import { api } from "~/utils/api";
 
 export default function Home() {
@@ -68,7 +68,7 @@ export default function Home() {
             <CodeGenButton lastCode={lastCode?.code} callback={_newCode} />
             <AuthShowcase />
           </div>
-          <h3 className="text-white">Here\'s a list of all the failed attempts haha</h3>
+          <h3 className="text-white">Here&apos;s a list of all the failed attempts haha</h3>
           {allCodes?.map((code)=>
             <p key={code.id} className="text-white">{code.code}</p>
           )}
