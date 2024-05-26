@@ -3,6 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { list } from "postcss";
 import { useEffect, useState } from "react";
+import { codeRouter } from "~/server/api/routers/codes";
 import type { ScratchCode } from "~/types/ScratchCode";
 import { api } from "~/utils/api";
 
@@ -18,6 +19,12 @@ export default function Home() {
     
     newCode(newOne.data);
     setAllCodes(newList.data);
+  }
+
+  async function redeemCode(codeId:number){
+    const updatedCode = await api.code.redeem.useQuery(codeId);
+    await runupdate();
+    return updatedCode;
   }
 
   // define state variables 
@@ -82,13 +89,25 @@ useEffect(()=>{
           </div>
           <h3 className="text-white">Here&apos;s a list of all the failed attempts haha</h3>
           {allCodes?.map((code)=>
-            <p key={code.id} className="text-white">{code.code}</p>
+            <RedeemCode onRedeem={()=>redeemCode(code.id)} key={code.id} _id={code.id} code={code.code} ></RedeemCode>
           )}
         
         </div>
       </main>
     </>
   );
+}
+
+type RedeemData = { 
+  _id:number;
+  code:string;
+  onRedeem:()=>void;
+}
+
+function RedeemCode(Props:RedeemData){
+
+  return <button key={Props._id} className="text-white">{Props.code}</button>
+
 }
 
 // make sure the button's data is hunky-dory

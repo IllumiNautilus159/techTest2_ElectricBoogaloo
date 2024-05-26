@@ -1,5 +1,7 @@
+import { connect } from "http2";
+import { useSession } from "next-auth/react";
 import { z } from "zod";
-import {createTRPCRouter,publicProcedure} from "~/server/api/trpc";
+import {createTRPCRouter,protectedProcedure,publicProcedure} from "~/server/api/trpc";
 
 export const codeRouter = createTRPCRouter({
     getCode:publicProcedure
@@ -38,6 +40,27 @@ export const codeRouter = createTRPCRouter({
             where:{
                 id:{
                     not:0
+                }
+            },
+            include:{
+                codes:true
+            }
+        })
+    }),
+    redeem: protectedProcedure
+    .input(z.number())
+    .query(({input,ctx})=>{
+        const {data:session} = useSession();
+        const userId = session?.user.id;
+        return ctx.db.code.update({
+            where:{
+                id:input
+            },
+            data:{
+                owner:{
+                    connect:{
+                        id:userId
+                    }
                 }
             }
         })
