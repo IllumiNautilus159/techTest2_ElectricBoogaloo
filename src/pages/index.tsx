@@ -21,11 +21,7 @@ export default function Home() {
     setAllCodes(newList.data);
   }
 
-  async function redeemCode(codeId:number){
-    const updatedCode = api.code.redeem.useQuery(codeId);
-    await runupdate();
-    return updatedCode;
-  }
+ 
 
   // define state variables 
   const [lastCode, newCode] = useState<ScratchCode>();
@@ -41,6 +37,10 @@ useEffect(()=>{
     freshData().catch((error)=>console.log(error))
 },[trigger]);
 
+async function redeemCode(codeId:number){
+  const updatedCode = api.code.redeem.useQuery(codeId);
+  runMake(trigger + 0);
+}
   return (
     <>
       <Head>
