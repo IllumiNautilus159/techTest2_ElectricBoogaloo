@@ -7,8 +7,6 @@ import {
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
 import GithubProvider from "next-auth/providers/github"
-import { signIn } from "next-auth/react";
-import { env } from "~/env";
 import { db } from "~/server/db";
 
 /**
@@ -45,8 +43,8 @@ export const authOptions: NextAuthOptions = {
         id: user.id,
       },
     }),
-    signIn:(()=>{
-
+    signIn:(async({user,account})=>{
+      return true;
     })
   },
   adapter: PrismaAdapter(db) as Adapter,
