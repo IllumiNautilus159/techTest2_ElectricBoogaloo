@@ -41,6 +41,7 @@ useEffect(()=>{
 
 async function redeemCode(codeId:number){
   const updatedCode = api.code.redeem.useQuery(codeId);
+  updatedCode;
   runMake(trigger + 0);
 }
   return (
