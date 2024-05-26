@@ -43,10 +43,7 @@ export const authOptions: NextAuthOptions = {
         id: user.id,
       },
     }),
-    signIn({ user, account, profile, email, credentials }) {
-      console.log("Sign in", user, account, profile, email, credentials);
-      return true;
-    },
+
   },
   adapter: PrismaAdapter(db) as Adapter,
   providers: [
