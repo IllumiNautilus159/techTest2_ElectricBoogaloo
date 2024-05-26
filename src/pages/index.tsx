@@ -1,7 +1,7 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ScratchCode } from "~/types/ScratchCode";
 import { api } from "~/utils/api";
 
@@ -16,14 +16,22 @@ export default function Home() {
   //init values
   const initcodes = api.code.getAllCodes.useQuery();
   const makeCode = api.code.generateCode.useQuery("500");
-
+  const [trigger,runMake] = useState(0);
   // refesh state vars (triggers when "Make a code!" clicked)
-  const _newCode = async ()=>{
+  // const _newCode = async ()=>{
+  //   await makeCode.refetch();
+  //   await initcodes.refetch();
+  //   newCode(makeCode.data);
+  //   setAllCodes(initcodes.data);
+  // }
+useEffect(()=>{;
+  (async()=>{
     await makeCode.refetch();
     await initcodes.refetch();
     newCode(makeCode.data);
     setAllCodes(initcodes.data);
-  }
+  })()
+},[trigger]);
 
   return (
     <>
@@ -65,7 +73,7 @@ export default function Home() {
             <p className="text-2xl text-white">
               {hello.data ? hello.data.greeting : "Loading tRPC query..."}
             </p>
-            <CodeGenButton lastCode={lastCode?.code} callback={_newCode} />
+            <CodeGenButton lastCode={lastCode?.code} count={trigger} callback={()=>{runMake(trigger + 1)}} />
             <AuthShowcase />
           </div>
           <h3 className="text-white">Here&apos;s a list of all the failed attempts haha</h3>
@@ -82,7 +90,8 @@ export default function Home() {
 // make sure the button's data is hunky-dory
 type ButtonData = {
   callback:()=>void;
-  lastCode?:string
+  lastCode?:string;
+  count:number;
 }
 
 export function CodeGenButton(props:ButtonData){
@@ -90,9 +99,11 @@ export function CodeGenButton(props:ButtonData){
   const update = props.callback;
   // the value that is to be displayed
   const code = props.lastCode;
+
   return <>
           <button className="text-white" onClick={update}>Make A Code!</button>
           <p className="text-white">{code}</p>
+          <p className="text-white">You have made {props.count} codes this session</p>
         </>
 
 }
