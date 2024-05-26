@@ -74,7 +74,10 @@ useEffect(()=>{
             <p className="text-2xl text-white">
               {hello.data ? hello.data.greeting : "Loading tRPC query..."}
             </p>
+            {(makeCode.isLoading || makeCode.isFetching) ? <p className="text-white">Just Having a think...</p> : null}
+            
             <CodeGenButton lastCode={lastCode?.code} count={trigger} callback={()=>{runMake(trigger + 1)}} />
+            
             <AuthShowcase />
           </div>
           <h3 className="text-white">Here&apos;s a list of all the failed attempts haha</h3>
