@@ -49,6 +49,7 @@ model Account {
     refresh_token     String? //@db.Text error: Native type Text is not supported for sqlite connector.
     access_token      String? //@db.Text error: Native type Text is not supported for sqlite connector.
     expires_at        Int?
+    refresh_token_expires_in? DateTime
     token_type        String?
     scope             String?
     id_token          String? //@db.Text error: Native type Text is not supported for sqlite connector.
