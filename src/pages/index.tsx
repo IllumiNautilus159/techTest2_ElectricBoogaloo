@@ -24,13 +24,14 @@ export default function Home() {
   //   newCode(makeCode.data);
   //   setAllCodes(initcodes.data);
   // }
-useEffect(()=>{;
-  (async()=>{
+useEffect(()=>{
+  ( async()=>{
     await makeCode.refetch();
     await initcodes.refetch();
     newCode(makeCode.data);
     setAllCodes(initcodes.data);
-  })()
+  }
+)
 },[trigger]);
 
   return (
