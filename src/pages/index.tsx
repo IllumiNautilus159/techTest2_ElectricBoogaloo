@@ -22,7 +22,7 @@ export default function Home() {
   }
 
   async function redeemCode(codeId:number){
-    const updatedCode = await api.code.redeem.useQuery(codeId);
+    const updatedCode = api.code.redeem.useQuery(codeId);
     await runupdate();
     return updatedCode;
   }
