@@ -110,9 +110,9 @@ function RedeemCode(Props:RedeemData){
   return <>
   {
   Props.owner ?
-    <button key={Props._id} className="text-white disabled">{Props.code}: Already Redeemed by {Props.owner.name}</button>
+    <button key={Props._id}  className="text-white disabled">{Props.code}: Already Redeemed by {Props.owner.name}</button>
   :
-    <button key={Props._id} className="text-white">{Props.code}</button>
+    <button key={Props._id} onClick={Props.onRedeem} className="text-white">{Props.code}</button>
   }
   </>
 
