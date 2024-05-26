@@ -36,9 +36,11 @@ useEffect(()=>{
     const freshData = async()=>{await runupdate()};
     freshData().catch((error)=>console.log(error))
 },[trigger]);
-const updatedCode = (codeId:number)=>api.code.redeem.useQuery(codeId);
+
+
+
 async function redeemCode(codeId:number){
-  updatedCode(codeId);
+  const updatedCode = await api.code.redeem.useQuery(codeId);
   runMake(trigger + 0);
 }
   return (

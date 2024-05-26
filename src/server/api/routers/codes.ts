@@ -46,10 +46,10 @@ export const codeRouter = createTRPCRouter({
     }),
     redeem: protectedProcedure
     .input(z.number())
-    .query(({input,ctx})=>{
+    .query(async({input,ctx})=>{
         const {data:session} = useSession();
         const userId = session?.user.id;
-        return ctx.db.code.update({
+        return await ctx.db.code.update({
             where:{
                 id:input
             },
