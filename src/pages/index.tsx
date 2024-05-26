@@ -1,13 +1,24 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
+import { list } from "postcss";
 import { useEffect, useState } from "react";
 import type { ScratchCode } from "~/types/ScratchCode";
 import { api } from "~/utils/api";
 
+
 export default function Home() {
 
   const hello = api.post.hello.useQuery({ text: "from tRPC" });
+
+  
+  async function runupdate(){
+    const newOne = await makeCode.refetch();
+    const newList = await initcodes.refetch();
+    
+    newCode(newOne.data);
+    setAllCodes(newList.data);
+  }
 
   // define state variables 
   const [lastCode, newCode] = useState<ScratchCode>();
@@ -19,13 +30,8 @@ export default function Home() {
   const [trigger,runMake] = useState(0);
   
 useEffect(()=>{
-  ( async()=>{
-    await makeCode.refetch();
-    await initcodes.refetch();
-    newCode(makeCode.data);
-    setAllCodes(initcodes.data);
-  }
-)
+    const freshData = async()=>{await runupdate()};
+    freshData().catch((error)=>console.log(error))
 },[trigger]);
 
   return (
