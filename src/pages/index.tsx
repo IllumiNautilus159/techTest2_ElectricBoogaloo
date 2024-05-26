@@ -17,13 +17,7 @@ export default function Home() {
   const initcodes = api.code.getAllCodes.useQuery();
   const makeCode = api.code.generateCode.useQuery("500");
   const [trigger,runMake] = useState(0);
-  // refesh state vars (triggers when "Make a code!" clicked)
-  // const _newCode = async ()=>{
-  //   await makeCode.refetch();
-  //   await initcodes.refetch();
-  //   newCode(makeCode.data);
-  //   setAllCodes(initcodes.data);
-  // }
+  
 useEffect(()=>{
   ( async()=>{
     await makeCode.refetch();
