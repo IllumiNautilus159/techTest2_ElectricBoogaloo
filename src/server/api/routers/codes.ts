@@ -43,7 +43,7 @@ export const codeRouter = createTRPCRouter({
                 }
             },
             include:{
-                codes:true
+                owner:true
             }
         })
     }),

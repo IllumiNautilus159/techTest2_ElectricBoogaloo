@@ -1,7 +1,7 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import { list } from "postcss";
+import { CodeUser } from "~/types/UserType";
 import { useEffect, useState } from "react";
 import { codeRouter } from "~/server/api/routers/codes";
 import type { ScratchCode } from "~/types/ScratchCode";
@@ -89,7 +89,7 @@ useEffect(()=>{
           </div>
           <h3 className="text-white">Here&apos;s a list of all the failed attempts haha</h3>
           {allCodes?.map((code)=>
-            <RedeemCode onRedeem={()=>redeemCode(code.id)} key={code.id} _id={code.id} code={code.code} ></RedeemCode>
+            <RedeemCode onRedeem={()=>redeemCode(code.id)} owner={code.owner} key={code.id} _id={code.id} code={code.code} ></RedeemCode>
           )}
         
         </div>
@@ -101,12 +101,20 @@ useEffect(()=>{
 type RedeemData = { 
   _id:number;
   code:string;
+  owner?:CodeUser;
   onRedeem:()=>void;
 }
 
 function RedeemCode(Props:RedeemData){
 
-  return <button key={Props._id} className="text-white">{Props.code}</button>
+  return <>
+  {
+  Props.owner ?
+    <button key={Props._id} className="text-white disabled">{Props.code}: Already Redeemed by {Props.owner.name}</button>
+  :
+    <button key={Props._id} className="text-white">{Props.code}</button>
+  }
+  </>
 
 }
 

@@ -1,4 +1,4 @@
-
+import { CodeUser } from "./UserType";
 export type ScratchCode = {
     id:number;
     userId?:string|null;
@@ -7,4 +7,5 @@ export type ScratchCode = {
     redeemed :boolean;
     createdAt?: Date|null;
     redeemedAt?: Date|null;
+    owner?:CodeUser
 };
